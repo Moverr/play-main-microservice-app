@@ -3,8 +3,8 @@
 # ~~~~
 
 # Home page
-GET        /bigPipe/with           @controllers.Application.withBigPipe()
-GET        /bigPipe/without        @controllers.Application.withoutBigPipe()
+GET        /bigpipe/with           @controllers.Application.withBigPipe()
+GET        /bigpipe/without        @controllers.Application.withoutBigPipe()
 
 
 # testing purposes

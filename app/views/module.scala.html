@@ -1,0 +1,8 @@
+@(response : play.libs.ws.WSResponse)
+
+    <div class="module">
+        <h3 class="id">Status : @response.getStatus</h3>
+        <h6>took</h6>
+        <h2 class="highlight">@response.getBody</h2>
+        <h6>to respond</h6>
+    </div>

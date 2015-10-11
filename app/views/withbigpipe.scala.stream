@@ -1,0 +1,31 @@
+@(bigPipe: BigPipe, big: Pagelet, small: Pagelet, friends : Pagelet)
+
+<html>
+  <head>
+    <link rel="stylesheet" href="/assets/stylesheets/main.css">
+    <!-- You need to include the BigPipe JavaScript at the top of the page -->
+    <script src="/assets/com/ybrikman/ping/big-pipe.js"></script>
+  </head>
+  <body>
+    <h1>With Big Pipe</h1>
+    @HtmlStream.fromHtml(views.html.timing())
+
+    <!--
+      Wrap the entire body of your page with a bigPipe.render call. The pagelets parameter contains a Map from
+      Pagelet id to the HtmlStream for that Pagelet. You should put the HtmlStream for each of your Pagelets
+      into the appropriate place in the markup.
+    -->
+    @bigPipe.render { pagelets =>
+      <table class="wrapper">
+        <tr>
+          <td>@pagelets(big.id)</td>
+        </tr>
+        <tr>
+          <td>@pagelets(small.id)</td>
+          <td>@pagelets(friends.id)</td>
+        </tr>
+      </table>
+    }
+
+    </body>
+</html>

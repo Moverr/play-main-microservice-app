@@ -22,69 +22,6 @@ public class CompositionController extends Controller {
     @Inject
     private UrlHelper urlHelper;
 
-//    public F.Promise<Result> calculate() {
-//
-//        final F.Promise<WSResponse> big  = WS.url(urlHelper.getCaculatorUrl() + "calculation/big").get();
-//        final F.Promise<WSResponse> small  = WS.url(urlHelper.getCaculatorUrl() + "calculation/small").get();
-//
-//        final F.Promise<Boolean> success = F.Promise.sequence(big, small).
-//                map(response ->
-//                        response.stream().allMatch((oneResponse) ->
-//                                oneResponse.getStatus() == 200));
-//
-//        Boolean successf = success.get(1000); // blocking !!! not good TODO
-//
-//        return success.map((x) -> // if true
-//                x.booleanValue() ?
-//                        F.Promise.sequence(big, small).map(x -> ok(x)) :
-//                        F.Promise.pure(badRequest("Something bad happend")));
-//
-////        if (successf) {
-////            return F.Promise.sequence(big, small).map(x ->
-////                    x.stream().reduce((a, b) ->
-////                            F.Promise.pure((Integer) (a.asJson().asInt() + b.asJson().asInt()))));
-////        } else {
-////            return F.Promise.pure(badRequest("Something bad happend"));
-////        }
-//
-//
-//        return F.Promise.sequence(big, small).
-//                map(x -> {
-//                        x.stream().map(response -> {
-//                            Map<String, WSResponse> data = new HashMap<>(); //TODO Promise<Boolean> ?
-//                            data.put("result", response);
-//                            return data;
-//                                                    }
-//                                        );
-//                            return null;
-//                        }
-//                ).map(Json::toJson)
-//                    .map(jsonResponse -> (Result) ok(jsonResponse))
-//                    .recover(t -> badRequest(t.getMessage()  + "\n"));
-//
-//
-///**
-//
-//        count = listOfCalculations.filter((x) -> true).
-//
-//        // X -> recover(F).map(!200).(NOK).map(200).(OK)
-//        listOfCalculations.
-//        // WS.url("").put(JsonNode) ->> PUT
-//        // WS.url("").delete() -> DELETE
-//        // WS.url("").post(Jnode) -> POST
-//
-//        // ?
-//
-// **/
-//    }
-
-
-
-//    public F.Promise<Result> readData() {
-//        //TODO same like calculate here !
-//        return null;
-//    }
-
 
     //TODO prerob na full functional
 
@@ -97,6 +34,9 @@ public class CompositionController extends Controller {
                 recover(t -> badRequest(t.getMessage() + "\n"));
 
     }
+
+
+
 
     public F.Promise<Result> calculateNF() {
         final F.Promise<WSResponse> big  = WS.url(urlHelper.getCaculatorUrl() + "calculation/big").get();
@@ -117,7 +57,5 @@ public class CompositionController extends Controller {
             return F.Promise.pure(badRequest("Something bad happend"));
         }
     }
-
-
 
 }
