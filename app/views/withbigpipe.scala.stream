@@ -1,4 +1,11 @@
-@(bigPipe: BigPipe, big: Pagelet, small: Pagelet, friends : Pagelet, friend : Pagelet)
+@(bigPipe : BigPipe,
+  big : Pagelet,
+  small : Pagelet,
+  friends : Pagelet,
+  friend : Pagelet,
+  big2: Pagelet,
+  big3: Pagelet
+  )
 
 <html>
   <head>
@@ -20,10 +27,12 @@
         <tr>
           <td>@pagelets(big.id)</td>
           <td>@pagelets(friend.id)</td>
+          <td>@pagelets(small.id)</td>
         </tr>
         <tr>
-          <td>@pagelets(small.id)</td>
           <td>@pagelets(friends.id)</td>
+          <td>@pagelets(big2.id)</td>
+          <td>@pagelets(big3.id)</td>
         </tr>
       </table>
     }

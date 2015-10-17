@@ -1,5 +1,10 @@
-@(big : play.libs.ws.WSResponse, small : play.libs.ws.WSResponse, friends : play.libs.ws.WSResponse, friend : play.libs.ws.WSResponse)
-
+@(big : play.libs.ws.WSResponse,
+        small : play.libs.ws.WSResponse,
+        friends : play.libs.ws.WSResponse,
+        friend : play.libs.ws.WSResponse,
+        big2 : play.libs.ws.WSResponse,
+        big3 : play.libs.ws.WSResponse
+        )
 <html>
     <head>
         <link rel="stylesheet" href="/assets/stylesheets/main.css">
@@ -11,10 +16,12 @@
             <tr>
                 <td><div id="big">@views.html.module(big)</div></td>
                 <td><div id="friend">@views.html.module(friend)</div></td>
+                <td><div id="small">@views.html.module(small)</div></td>
             </tr>
             <tr>
-                <td><div id="small">@views.html.module(small)</div></td>
                 <td><div id="friends">@views.html.module(friends)</div></td>
+                <td><div id="big2">@views.html.module(big2)</div></td>
+                <td><div id="big3">@views.html.module(big3)</div></td>
             </tr>
         </table>
         </body>

@@ -1,6 +1,7 @@
 package controllers;
 
 import com.google.inject.Inject;
+import core.ServiceClient;
 import core.UrlHelper;
 import play.libs.F;
 import play.libs.Json;
@@ -21,6 +22,7 @@ public class CompositionController extends Controller {
 
     @Inject
     private UrlHelper urlHelper;
+
 
 
     //TODO potom compozicne s F.Promise<Result> z COmpositionControllera
