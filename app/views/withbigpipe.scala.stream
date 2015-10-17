@@ -1,4 +1,4 @@
-@(bigPipe: BigPipe, big: Pagelet, small: Pagelet, friends : Pagelet)
+@(bigPipe: BigPipe, big: Pagelet, small: Pagelet, friends : Pagelet, friend : Pagelet)
 
 <html>
   <head>
@@ -19,6 +19,7 @@
       <table class="wrapper">
         <tr>
           <td>@pagelets(big.id)</td>
+          <td>@pagelets(friend.id)</td>
         </tr>
         <tr>
           <td>@pagelets(small.id)</td>

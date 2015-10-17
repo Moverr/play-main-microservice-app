@@ -23,7 +23,9 @@ public class CompositionController extends Controller {
     private UrlHelper urlHelper;
 
 
+    //TODO potom compozicne s F.Promise<Result> z COmpositionControllera
     //TODO prerob na full functional
+
 
     public F.Promise<Result> readDataNF() {
 
@@ -34,8 +36,6 @@ public class CompositionController extends Controller {
                 recover(t -> badRequest(t.getMessage() + "\n"));
 
     }
-
-
 
 
     public F.Promise<Result> calculateNF() {

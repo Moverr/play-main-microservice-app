@@ -13,30 +13,27 @@ import play.mvc.Result;
 
 public class Application extends Controller {
 
-//    @Inject
-//    private CompositionController composition;
-
     @Inject
     private UrlHelper urlHelper;
 
-    //TODO potom compozicne s F.Promise<Result> z COmpositionControllera
-
-
+    
     public F.Promise<Result> withBigPipe() {
 
-//        final F.Promise<WSResponse> bigPromise = WS.url(urlHelper.getCaculatorUrl() + "calculation/big").get();
-//        final F.Promise<WSResponse> smallPromise = WS.url(urlHelper.getCaculatorUrl() + "calculation/small").get();
-//        final F.Promise<WSResponse> friendsPromise = WS.url(urlHelper.getBackendUrl() + "backend/friends").get();
-//
-//
-//        Pagelet big = new HtmlPagelet("big", bigPromise.map(() -> views.html.module.render()));
-//        Pagelet small = new HtmlPagelet("small", smallPromise.map(() -> views.html.module.render()));
-//        Pagelet friends = new HtmlPagelet("friends", friendsPromise.map(() -> views.html.module.render()));
-//
-//        BigPipe bigPipe = new BigPipe(PageletRenderOptions.ClientSide, big, small, friends);
-//        return ok(HtmlStreamHelper.toChunks(views.stream.withbigpipe.apply(bigPipe, big, small, friends)));
+        final F.Promise<WSResponse> bigPromise = WS.url(urlHelper.getCaculatorUrl() + "calculation/big").get();
+        final F.Promise<WSResponse> smallPromise = WS.url(urlHelper.getCaculatorUrl() + "calculation/small").get();
+        final F.Promise<WSResponse> friendsPromise = WS.url(urlHelper.getBackendUrl() + "backend/friends").get();
+        final F.Promise<WSResponse> friendPromise = WS.url(urlHelper.getBackendUrl() + "backend/friend/3").get();
 
-        return F.Promise.pure(ok("aa"));
+        final Pagelet big = new HtmlPagelet("big", bigPromise.map(views.html.module::render));
+        final Pagelet small = new HtmlPagelet("small", smallPromise.map(views.html.module::render));
+        final Pagelet friends = new HtmlPagelet("friends", friendsPromise.map(views.html.module::render));
+        final Pagelet friend = new HtmlPagelet("friend", friendPromise.map(views.html.module::render));
+
+        final BigPipe bigPipe = new BigPipe(PageletRenderOptions.ClientSide, big, small, friends, friend);
+
+        return F.Promise.pure(
+                ok(HtmlStreamHelper.toChunks(views.stream.withbigpipe.apply(bigPipe, big, small, friends, friend)))
+        );
     }
 
 
@@ -48,9 +45,6 @@ public class Application extends Controller {
         final F.Promise<WSResponse> smallPromise = WS.url(urlHelper.getCaculatorUrl() + "calculation/small").get();
         final F.Promise<WSResponse> friendsPromise = WS.url(urlHelper.getBackendUrl() + "backend/friends").get();
         final F.Promise<WSResponse> friendPromise = WS.url(urlHelper.getBackendUrl() + "backend/friend/3").get();
-
-        //TODO ked chcem friend ktory neexistuje hodi mi : No entity found for query 400
-        //TODO nemalo by hodit 200 a {} ?
 
         return PromiseHelper.sequence(bigPromise, smallPromise, friendsPromise, friendPromise)
                 .map((big, small, friends, friend) ->
