@@ -3,6 +3,7 @@ GET        /bigpipe/with           @controllers.Application.withBigPipe()
 GET        /bigpipe/without        @controllers.Application.withoutBigPipe()
 GET        /bigpipe/dedupe         @controllers.Application.withBigPipeAndDedupe()
 GET        /composition            @controllers.Application.compositionExample()
+GET        /bigpipe/dedupe/errors  @controllers.Application.withBigPipeAndDedupeErrors()
 
 GET        /readData               @controllers.CompositionController.readData()
 GET        /calculate              @controllers.CompositionController.calculate()

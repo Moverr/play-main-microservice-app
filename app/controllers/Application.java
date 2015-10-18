@@ -11,6 +11,7 @@ import play.libs.ws.WS;
 import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.twirl.api.Html;
 
 public class Application extends Controller {
 
@@ -28,6 +29,34 @@ public class Application extends Controller {
 //    @Inject
 //    private CompositionController compContrl;
 
+
+    /**
+     * if you need handle errors on app side not just delegate it from service calls
+     * also
+     * @return
+     */
+    public F.Promise<Result> withBigPipeAndDedupeErrors() {
+
+        final F.Promise<WSResponse> bigPromise = serviceClient.dedupeCall(urlHelper.getCaculatorUrl() + "calculation/big");
+        final F.Promise<WSResponse> bigPromise2 = serviceClient.dedupeCall(urlHelper.getCaculatorUrl() + "calculation/big");
+        final F.Promise<WSResponse> bigPromise3 = serviceClient.dedupeCall(urlHelper.getCaculatorUrl() + "calculation/big");
+        final F.Promise<WSResponse> smallPromise = serviceClient.dedupeCall(urlHelper.getCaculatorUrl() + "calculation/small");
+        final F.Promise<WSResponse> friendsPromise = serviceClient.dedupeCall(urlHelper.getBackendUrl() + "backend/friends");
+        final F.Promise<WSResponse> friendPromise = serviceClient.dedupeCall(urlHelper.getBackendUrl() + "backend/friend/3");
+
+        final Pagelet big = new HtmlPagelet("big", renderWithErrors(bigPromise));
+        final Pagelet big2 = new HtmlPagelet("big2", renderWithErrors(bigPromise2));
+        final Pagelet big3 = new HtmlPagelet("big3", renderWithErrors(bigPromise3));
+        final Pagelet small = new HtmlPagelet("small", renderWithErrors(smallPromise));
+        final Pagelet friends = new HtmlPagelet("friends", renderWithErrors(friendsPromise));
+        final Pagelet friend = new HtmlPagelet("friend", renderWithErrors(friendPromise));
+
+        final BigPipe bigPipe = new BigPipe(PageletRenderOptions.ClientSide, big, small, friends, friend, big2, big3);
+
+        return F.Promise.pure(
+                ok(HtmlStreamHelper.toChunks(views.stream.withbigpipe.apply(bigPipe, big, small, friends, friend, big2, big3)))
+        );
+    }
 
     /**
      * de-dupe service calls and big pipe example
@@ -101,6 +130,15 @@ public class Application extends Controller {
                 .map((big, small, friends, friend, big2, big3) ->
                                 ok(views.html.withoutbigpipe.render(big, small, friends, friend, big2, big3))
                 );
+    }
+
+
+    // if main app need handle errors
+    private F.Promise<Html> renderWithErrors(F.Promise<WSResponse> dataPromise) {
+        return dataPromise
+                .map(response ->
+                        response.getStatus() == 200 ? views.html.module.apply(response) : views.html.error.apply());
+                //.recover(views.html.error::apply);
     }
 
 
