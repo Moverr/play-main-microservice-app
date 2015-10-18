@@ -24,7 +24,7 @@ public class CompositionController extends Controller {
     private UrlHelper urlHelper;
 
 
-    public F.Promise<Result> readDataNF() {
+    public F.Promise<Result> readData() {
 
         return WS.url(urlHelper.getBackendUrl() + "backend/friends").get()
                 .map(response ->
@@ -34,7 +34,7 @@ public class CompositionController extends Controller {
 
     }
 
-    public F.Promise<Result> calculateNF() {
+    public F.Promise<Result> calculate() {
 
         final F.Promise<WSResponse> big  =
                 WS.url(urlHelper.getCaculatorUrl() + "calculation/big").get();

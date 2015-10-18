@@ -14,6 +14,7 @@ import play.mvc.Result;
 
 public class Application extends Controller {
 
+    // deduping for one controller (just red from code)
     private final ServiceClient serviceClient;
 
     @Inject
@@ -24,35 +25,9 @@ public class Application extends Controller {
     @Inject
     private UrlHelper urlHelper;
 
-    @Inject
-    private CompositionController compContrl;
+//    @Inject
+//    private CompositionController compContrl;
 
-
-    /**
-     * big pipe example
-     */
-    public F.Promise<Result> withBigPipe() {
-
-        final F.Promise<WSResponse> bigPromise = WS.url(urlHelper.getCaculatorUrl() + "calculation/big").get();
-        final F.Promise<WSResponse> bigPromise2 = WS.url(urlHelper.getCaculatorUrl() + "calculation/big").get();
-        final F.Promise<WSResponse> bigPromise3 = WS.url(urlHelper.getCaculatorUrl() + "calculation/big").get();
-        final F.Promise<WSResponse> smallPromise = WS.url(urlHelper.getCaculatorUrl() + "calculation/small").get();
-        final F.Promise<WSResponse> friendsPromise = WS.url(urlHelper.getBackendUrl() + "backend/friends").get();
-        final F.Promise<WSResponse> friendPromise = WS.url(urlHelper.getBackendUrl() + "backend/friend/3").get();
-
-        final Pagelet big = new HtmlPagelet("big", bigPromise.map(views.html.module::render));
-        final Pagelet big2 = new HtmlPagelet("big2", bigPromise2.map(views.html.module::render));
-        final Pagelet big3 = new HtmlPagelet("big3", bigPromise3.map(views.html.module::render));
-        final Pagelet small = new HtmlPagelet("small", smallPromise.map(views.html.module::render));
-        final Pagelet friends = new HtmlPagelet("friends", friendsPromise.map(views.html.module::render));
-        final Pagelet friend = new HtmlPagelet("friend", friendPromise.map(views.html.module::render));
-
-        final BigPipe bigPipe = new BigPipe(PageletRenderOptions.ClientSide, big, small, friends, friend, big2, big3);
-
-        return F.Promise.pure(
-                ok(HtmlStreamHelper.toChunks(views.stream.withbigpipe.apply(bigPipe, big, small, friends, friend, big2, big3)))
-        );
-    }
 
     /**
      * de-dupe service calls and big pipe example
@@ -83,6 +58,32 @@ public class Application extends Controller {
     }
 
 
+    /**
+     * big pipe example
+     */
+    public F.Promise<Result> withBigPipe() {
+
+        final F.Promise<WSResponse> bigPromise = WS.url(urlHelper.getCaculatorUrl() + "calculation/big").get();
+        final F.Promise<WSResponse> bigPromise2 = WS.url(urlHelper.getCaculatorUrl() + "calculation/big").get();
+        final F.Promise<WSResponse> bigPromise3 = WS.url(urlHelper.getCaculatorUrl() + "calculation/big").get();
+        final F.Promise<WSResponse> smallPromise = WS.url(urlHelper.getCaculatorUrl() + "calculation/small").get();
+        final F.Promise<WSResponse> friendsPromise = WS.url(urlHelper.getBackendUrl() + "backend/friends").get();
+        final F.Promise<WSResponse> friendPromise = WS.url(urlHelper.getBackendUrl() + "backend/friend/3").get();
+
+        final Pagelet big = new HtmlPagelet("big", bigPromise.map(views.html.module::render));
+        final Pagelet big2 = new HtmlPagelet("big2", bigPromise2.map(views.html.module::render));
+        final Pagelet big3 = new HtmlPagelet("big3", bigPromise3.map(views.html.module::render));
+        final Pagelet small = new HtmlPagelet("small", smallPromise.map(views.html.module::render));
+        final Pagelet friends = new HtmlPagelet("friends", friendsPromise.map(views.html.module::render));
+        final Pagelet friend = new HtmlPagelet("friend", friendPromise.map(views.html.module::render));
+
+        final BigPipe bigPipe = new BigPipe(PageletRenderOptions.ClientSide, big, small, friends, friend, big2, big3);
+
+        return F.Promise.pure(
+                ok(HtmlStreamHelper.toChunks(views.stream.withbigpipe.apply(bigPipe, big, small, friends, friend, big2, big3)))
+        );
+    }
+
 
 
     public F.Promise<Result> withoutBigPipe() {
@@ -104,9 +105,21 @@ public class Application extends Controller {
 
 
 
+
+
+
+
+
+
+
+
+
+
     //TODO
     public F.Promise<Result> compositionExample() {
-        return null;
+//        F.Promise<Result> readDataPromise = F.Promise.promise(compContrl.readData());
+//        F.Promise<Result> calculatePromise = F.Promise.promise(compContrl.calculate());
+        return F.Promise.pure(ok("OK"));
     }
 
 }

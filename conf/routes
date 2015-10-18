@@ -1,16 +1,11 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
 
-# Home page
 GET        /bigpipe/with           @controllers.Application.withBigPipe()
 GET        /bigpipe/without        @controllers.Application.withoutBigPipe()
 GET        /bigpipe/dedupe         @controllers.Application.withBigPipeAndDedupe()
+GET        /composition            @controllers.Application.compositionExample()
 
-
-# testing purposes
-GET        /readDataNF             @controllers.CompositionController.readDataNF()
-GET        /calculateNF            @controllers.CompositionController.calculateNF()
+GET        /readData               @controllers.CompositionController.readData()
+GET        /calculate              @controllers.CompositionController.calculate()
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file           controllers.Assets.versioned(path="/public", file: Asset)
