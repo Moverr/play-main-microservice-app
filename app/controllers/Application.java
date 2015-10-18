@@ -136,9 +136,12 @@ public class Application extends Controller {
     // if main app need handle errors
     private F.Promise<Html> renderWithErrors(F.Promise<WSResponse> dataPromise) {
         return dataPromise
+                // if comes response with status != 200
                 .map(response ->
-                        response.getStatus() == 200 ? views.html.module.apply(response) : views.html.error.apply());
-                //.recover(views.html.error::apply);
+                        response.getStatus() == 200 ? views.html.module.render(response) : views.html.error.render())
+                // if throwable occurs
+                .recover(t ->
+                        views.html.error.render());
     }
 
 
