@@ -29,7 +29,7 @@ public class CompositionController extends Controller {
         return WS.url(urlHelper.getBackendUrl() + "backend/friends").get()
                 .map(response ->
                         response.getStatus() == 200 ?
-                                (Result) ok(response.asJson()) : (Result) badRequest("Something bad happend"))
+                                (Result) ok(response.asJson()) : (Result) badRequest("Something bad happend")) // retyping is because of Idea bug
                 .recover(t -> badRequest(t.getMessage() + "\n"));
 
     }
