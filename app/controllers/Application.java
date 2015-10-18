@@ -24,6 +24,9 @@ public class Application extends Controller {
     @Inject
     private UrlHelper urlHelper;
 
+    @Inject
+    private CompositionController compContrl;
+
 
     /**
      * big pipe example
@@ -52,8 +55,8 @@ public class Application extends Controller {
     }
 
     /**
-     * de-dupe service calls anf big pipe example
-     * deduping are all, efective just for (big, big2, big3)
+     * de-dupe service calls and big pipe example
+     * de-duping are all, effective just for (big, big2, big3)
      * @return
      */
     public F.Promise<Result> withBigPipeAndDedupe() {
@@ -91,10 +94,19 @@ public class Application extends Controller {
         final F.Promise<WSResponse> friendsPromise = WS.url(urlHelper.getBackendUrl() + "backend/friends").get();
         final F.Promise<WSResponse> friendPromise = WS.url(urlHelper.getBackendUrl() + "backend/friend/3").get();
 
+        // wait for all promise onComplete (but in most efficient way)
+        // basically scatter gather pattern
         return PromiseHelper.sequence(bigPromise, smallPromise, friendsPromise, friendPromise, bigPromise2, bigPromise3)
                 .map((big, small, friends, friend, big2, big3) ->
                                 ok(views.html.withoutbigpipe.render(big, small, friends, friend, big2, big3))
                 );
+    }
+
+
+
+    //TODO
+    public F.Promise<Result> compositionExample() {
+        return null;
     }
 
 }

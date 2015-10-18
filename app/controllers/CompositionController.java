@@ -24,40 +24,49 @@ public class CompositionController extends Controller {
     private UrlHelper urlHelper;
 
 
-
-    //TODO potom compozicne s F.Promise<Result> z COmpositionControllera
-    //TODO prerob na full functional
-
-
     public F.Promise<Result> readDataNF() {
 
-        return WS.url(urlHelper.getBackendUrl() + "backend/friends").get().
-                map(response ->
+        return WS.url(urlHelper.getBackendUrl() + "backend/friends").get()
+                .map(response ->
                         response.getStatus() == 200 ?
-                                (Result) ok(response.asJson()) : (Result) badRequest("Something bad happend")).
-                recover(t -> badRequest(t.getMessage() + "\n"));
+                                (Result) ok(response.asJson()) : (Result) badRequest("Something bad happend"))
+                .recover(t -> badRequest(t.getMessage() + "\n"));
 
     }
 
-
     public F.Promise<Result> calculateNF() {
-        final F.Promise<WSResponse> big  = WS.url(urlHelper.getCaculatorUrl() + "calculation/big").get();
-        final F.Promise<WSResponse> small  = WS.url(urlHelper.getCaculatorUrl() + "calculation/small").get();
 
-        final F.Promise<Boolean> successPromise = F.Promise.sequence(big, small).
-                map(response ->
+        final F.Promise<WSResponse> big  =
+                WS.url(urlHelper.getCaculatorUrl() + "calculation/big").get();
+        final F.Promise<WSResponse> small  =
+                WS.url(urlHelper.getCaculatorUrl() + "calculation/small").get();
+
+        final F.Promise<List<WSResponse>> promiseSeq = F.Promise.sequence(big, small);
+
+        return
+                // is both values ok ? = have i two 200 responses ?
+                promiseSeq.map(response ->
                         response.stream().allMatch((oneResponse) ->
-                                oneResponse.getStatus() == 200));
+                                oneResponse.getStatus() == 200))
+                // if everything ok onSuccess otherwise onFail()
+                .flatMap(success ->
+                        success ? onSuccess(promiseSeq) : onFail());
+    }
 
-        final Boolean success = successPromise.get(10000); // blocking !!! not good TODO
 
-        if (success) {
-            Integer bigf = big.get(10000).asJson().get("result").asInt(); // it dont wait 10s, it wait max 10 s !
-            Integer smallF = small.get(10000).asJson().get("result").asInt(); // it dont wait 10s, it wait max 10 s !
-            return F.Promise.pure(ok(String.valueOf(bigf + smallF)));
-        } else {
-            return F.Promise.pure(badRequest("Something bad happend"));
-        }
+
+
+    private F.Promise<Result> onSuccess(F.Promise<List<WSResponse>> response) {
+        return response
+                .map(list ->
+                         list.get(0).asJson().get("result").asInt() +
+                         list.get(1).asJson().get("result").asInt()
+                )
+                .map(result -> ok(String.valueOf(result)));
+    }
+
+    private F.Promise<Result> onFail() {
+        return F.Promise.pure(badRequest("Something bad happend"));
     }
 
 }
