@@ -55,7 +55,7 @@ public class Application extends Controller {
 
         return F.Promise.pure(
                 ok(HtmlStreamHelper.toChunks(views.stream.withbigpipe.apply(bigPipe, big, small, friends, friend, big2, big3)))
-        ).recover(t -> badRequest("MainApp crashed !")); // error handling for main app
+        );//TODO try recover for whole page
     }
 
     /**
