@@ -1,6 +1,0 @@
-[submodule "play-service-one"]
-	path = ../play-service-one
-	url = https://github.com/peterszatmary/play-service-one.git
-[submodule "play-service-backend"]
-	path = ../play-service-backend
-	url = https://github.com/peterszatmary/play-service-backend.git
